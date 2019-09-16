@@ -59,6 +59,8 @@ Rd2markdown <- function(rdfile, outfile, append=FALSE) {
 		# title as normal text
 		cat(paste0(results$title, section.sep), file=outfile, append=TRUE, sep="\n")
 		
+		# Append custom sections to be printed	
+		sections.print <- c(sections.print, names(unlist(sapply(results, function(x) attr(x, "isSection")))))
 		for (i in sections.print[!sections.print %in% c("name","title")]) {
 			if (i %in% names(results)) {
 			  cat(paste(subsection, simpleCap(i)), section.sep, file=outfile, append=TRUE, sep="")

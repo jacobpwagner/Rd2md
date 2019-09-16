@@ -64,3 +64,35 @@ parseTag <- function(x
 	
 	x
 }
+
+
+
+#' @name parseSection
+#' @title Parse Section tag from Rd Format to Markdown
+#' @description Section elements allow for arbritrary nested structure
+#' so this method recursively steps through and calls parseTag at the
+#' leaves then reassembles them in to a single markdown string.
+#' @param x element from an \code{Rd} class with a section tag.
+#' @param pre String to prepend to the parsed tag.
+#' @param post String to append to the parsed tag.
+#' @param stripNewline Logical indicating whether to strip new line characters.
+#' @param stripWhite Logical indicating whether to strip white space.
+#' @param stripTab Logical indicating whether to strip tab characters.
+parseSection <- function(x
+                     , pre=character()
+                     , post=character()
+                     , stripNewline=TRUE
+                     , stripWhite=TRUE
+                     , stripTab=TRUE
+) {
+  # browser()
+  if(is.list(x)){
+    x_parsed <- trim(paste(sapply(x, function(x_sub) parseSection(x_sub, pre=pre, post=post, stripNewline=stripNewline,
+                 stripWhite=stripWhite, stripTab=stripTab)), collapse = " "))
+  }else{
+    x_parsed <- parseTag(x, pre=pre, post=post, stripNewline=stripNewline,
+                         stripWhite=stripWhite, stripTab=stripTab)
+  }
+  invisible(x_parsed)
+}
+

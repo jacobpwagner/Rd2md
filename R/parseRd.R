@@ -50,6 +50,11 @@ parseRd <- function(rd) {
 			  results[[key]] <- trim(paste(sapply(rd[[which(tags==i)[1]]], FUN=function(x) {
 			    parseTag(x, stripNewline=FALSE)
 			  } ), collapse=""))
+		  } else if (i == "\\section") {
+		    for(item in rd[which(tags == "\\section")]){
+		      results[[parseTag(item[[1]])]] <- parseSection(item, stripNewline=FALSE, stripTab=FALSE)
+		      attr(results[[parseTag(item[[1]])]], "isSection") <- TRUE
+		    }
 			} else if (i %in% tags) {
 				key <- substr(i, 2, nchar(i))
 				results[[key]] <- trim(paste(sapply(rd[[which(tags==i)[1]]], FUN=function(x) {
